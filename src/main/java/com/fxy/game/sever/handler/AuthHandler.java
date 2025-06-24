@@ -5,8 +5,11 @@ import com.fxy.game.core.SessionManager;
 import com.fxy.game.message.AuthRequest;
 import com.fxy.game.message.AuthResponse;
 import com.fxy.game.message.Wrapper;
+import com.fxy.game.util.ServerUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+
+import java.net.InetSocketAddress;
 
 /**
  * @author FengXueyang
@@ -17,7 +20,13 @@ public class AuthHandler extends SimpleChannelInboundHandler<Wrapper> {
 
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Wrapper msg) throws Exception {
+    public void channelActive(ChannelHandlerContext ctx) throws Exception {
+        InetSocketAddress address = (InetSocketAddress) ctx.channel().remoteAddress();
+        ServerUtil.print("有新的客户端连接 host[{}] port[{}]", address.getHostString(), address.getPort());
+    }
+
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Wrapper msg) {
         Wrapper.MsgCase msgCase = msg.getMsgCase();
         if (msgCase == Wrapper.MsgCase.AUTHREQUEST) {
             AuthRequest request = msg.getAuthRequest();
