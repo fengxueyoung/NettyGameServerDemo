@@ -1,0 +1,141 @@
+syntax = "proto3";
+package game;
+
+import "google/protobuf/timestamp.proto";
+
+option java_package = "com.fxy.game.message";
+option java_multiple_files = true;
+option java_outer_classname = "GameMessage";
+
+message Wrapper {
+  oneof msg {
+    AuthRequest    authRequest = 1;
+    AuthResponse   authResponse = 2;
+    ChatRequest    chatRequest = 3;
+    ChatResponse   chatResponse = 4;
+    GameAction     gameAction = 5;
+    GameState      gameState = 6;
+    ShopRequest    shopRequest = 7;
+    ShopResponse   shopResponse = 8;
+    MailRequest    mailRequest = 9;
+    MailResponse   mailResponse = 10;
+    RoleRequest    roleRequest = 11;
+    RoleResponse   roleResponse = 12;
+  }
+}
+
+// ─── 身份认证模块 ───────────────────────────────────
+
+message AuthRequest {
+  string username = 1;
+  string password = 2;
+  enum OperationType {REGISTER = 0; LOGIN = 1;}
+  OperationType type = 3;
+}
+
+message AuthResponse {
+  bool success = 1;
+  string message = 2;
+  string sessionId = 3;
+}
+
+// ─── 聊天模块 ─────────────────────────────────────
+
+message ChatRequest {
+  string sessionId = 1;
+  string text = 2;
+  repeated string to = 3; // 空则群聊，非空为私聊
+}
+
+message ChatResponse {
+  string from = 1;
+  string text = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+// ─── 游戏行为模块 ─────────────────────────────────
+
+message GameAction {
+  string sessionId = 1;
+  enum ActionType {MOVE = 0; ATTACK = 1;}
+  ActionType type = 2;
+  int32 x = 3;
+  int32 y = 4;
+  int32 destX = 5;
+  int32 destY = 6;
+}
+
+message GameState {
+  repeated Player players = 1;
+  google.protobuf.Timestamp serverTime = 2;
+}
+
+message Player {
+  string sessionId = 1;
+  int32 x = 3;
+  int32 y = 4;
+  int32 hp = 5;
+  int32 atk = 6;
+  int32 dfs = 7;
+  Role role = 8;
+}
+
+// ─── 商城模块 ─────────────────────────────────────
+
+message ShopRequest {
+  string sessionId = 1;
+  int32 itemId = 2;
+  int32 purchaseNum = 3;
+}
+
+message ShopResponse {
+  bool success = 1;
+  string message = 2;
+  int32 balance = 3;
+}
+
+// ─── 邮件模块 ─────────────────────────────────────
+
+message MailRequest {
+  string sessionId = 1;
+  enum MailOp {SEND = 0; LIST = 1; READ = 2;}
+  MailOp op = 2;
+  string to = 3;
+  string subject = 4;
+  string body = 5;
+}
+
+message MailResponse {
+  bool success = 1;
+  repeated Mail mails = 2;
+}
+
+message Mail {
+  string id = 1;
+  string from = 2;
+  string subject = 3;
+  string body = 4;
+  bool read = 5;
+  google.protobuf.Timestamp sentTime = 6;
+}
+
+// ─── 角色系统模块 ─────────────────────────────────
+
+message RoleRequest {
+  string sessionId = 1;
+  enum Op {CREATE = 0; QUERY = 1;}
+  Op op = 2;
+  string roleName = 3;
+}
+
+message RoleResponse {
+  bool success = 1;
+  string message = 2;
+  Role role = 3;
+}
+
+message Role {
+  string roleName = 1;
+  int32 level = 2;
+  int32 exp = 3;
+}

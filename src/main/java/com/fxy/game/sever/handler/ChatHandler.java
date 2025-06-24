@@ -1,9 +1,17 @@
 package com.fxy.game.sever.handler;
 
+import com.fxy.game.message.Wrapper;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+
 /**
  * @author FengXueyang
  * @Title ChatHandler
  * @Date 2025/6/23 17:15
  **/
-public class ChatHandler {
+public class ChatHandler extends SimpleChannelInboundHandler<Wrapper> {
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, Wrapper msg) throws Exception {
+
+    }
 }
