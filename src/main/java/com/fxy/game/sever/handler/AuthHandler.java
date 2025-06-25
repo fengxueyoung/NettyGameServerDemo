@@ -24,10 +24,12 @@ public class AuthHandler extends SimpleChannelInboundHandler<Wrapper> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Wrapper msg) {
-        Wrapper wrapper = AuthService.getInstance().handleAuth(ctx, msg);
-        ctx.writeAndFlush(wrapper);
-        if (wrapper.getAuthResponse().getSuccess()) {
-            ctx.pipeline().remove(this);
+        if (msg.getMsgCase() == Wrapper.MsgCase.AUTHREQUEST) {
+            Wrapper wrapper = AuthService.getInstance().handleAuth(ctx, msg.getAuthRequest());
+            ctx.writeAndFlush(wrapper);
+            if (wrapper.getAuthResponse().getSuccess()) {
+                ctx.pipeline().remove(this);
+            }
         }
     }
 

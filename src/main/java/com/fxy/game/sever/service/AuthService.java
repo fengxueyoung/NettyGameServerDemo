@@ -21,33 +21,25 @@ public class AuthService {
             synchronized (AuthService.class) {
                 if (authService == null) {
                     authService = new AuthService();
-                    return authService;
-                } else {
-                    return authService;
                 }
+                return authService;
             }
         } else {
             return authService;
         }
     }
 
-    public Wrapper handleAuth(ChannelHandlerContext ctx, Wrapper wrapper) {
-        Wrapper.MsgCase msgCase = wrapper.getMsgCase();
-        if (msgCase == Wrapper.MsgCase.AUTHREQUEST) {
-            AuthRequest request = wrapper.getAuthRequest();
-            switch (request.getType()) {
-                case REGISTER -> {
-                    return handlerRegister(ctx, request);
-                }
-                case LOGIN -> {
-                    return handlerLogin(ctx, request);
-                }
-                default -> {
-                    return sendAuthFail("未知操作!");
-                }
+    public Wrapper handleAuth(ChannelHandlerContext ctx, AuthRequest request) {
+        switch (request.getType()) {
+            case REGISTER -> {
+                return handlerRegister(ctx, request);
             }
-        } else {
-            return sendAuthFail("请先登录!");
+            case LOGIN -> {
+                return handlerLogin(ctx, request);
+            }
+            default -> {
+                return sendAuthFail("未知操作!");
+            }
         }
     }
 
