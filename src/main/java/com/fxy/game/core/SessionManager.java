@@ -13,22 +13,30 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2025/6/23 17:17
  **/
 public class SessionManager {
-    private static final AttributeKey<String> USER_KEY = AttributeKey.newInstance("USER_KEY");
-    private static final Map<String, Channel> SESSIONS = new ConcurrentHashMap<>();
+    public static final AttributeKey<String> USER_KEY = AttributeKey.newInstance("USER_KEY");
+    public static final AttributeKey<String> USER_TOKEN = AttributeKey.newInstance("USER_TOKEN");
+    private static final Map<String, String> SESSIONS = new ConcurrentHashMap<>();
+    private static final Map<String, Channel> SESSION_CHANNELS = new ConcurrentHashMap<>();
     private static final SecureRandom RND = new SecureRandom();
 
     public static String createSession(String user, Channel ch) {
         String token = Long.toHexString(RND.nextLong());
-        SESSIONS.put(token, ch);
+        SESSIONS.put(token, user);
+        SESSION_CHANNELS.put(user, ch);
         ch.attr(USER_KEY).set(user);
+        ch.attr(USER_TOKEN).set(token);
         return token;
     }
 
-    public static Channel getChannel(String token) {
-        return SESSIONS.get(token);
+    public static Channel getChannel(String username) {
+        return SESSION_CHANNELS.get(username);
     }
 
     public static String getUserName(String token) {
-        return SESSIONS.get(token).attr(USER_KEY).get();
+        return SESSIONS.get(token);
+    }
+
+    public static boolean validateSession(String username, String token) {
+        return SESSIONS.get(token).equals(username);
     }
 }

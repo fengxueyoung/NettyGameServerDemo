@@ -73,7 +73,7 @@ public class AuthHandler extends SimpleChannelInboundHandler<Wrapper> {
                 .setAuthResponse(AuthResponse.newBuilder()
                         .setSuccess(false)
                         .setMessage(msg)
-                        .build()));
+                        .build()).build());
     }
 
     private void sendAuthSuccess(ChannelHandlerContext ctx, String username) {
@@ -82,7 +82,7 @@ public class AuthHandler extends SimpleChannelInboundHandler<Wrapper> {
                         .setSessionId(SessionManager.createSession(username, ctx.channel()))
                         .setSuccess(true)
                         .setMessage("登录成功!")
-                        .build()));
+                        .build()).build());
         ctx.pipeline().remove(this);
     }
 
