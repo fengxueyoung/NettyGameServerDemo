@@ -40,20 +40,14 @@ public class ChatHandler extends AbstractRequestHandler {
             String sessionId = request.getSessionId();
             if (!SessionManager.validateSession(username, sessionId)) {
                 sendRequestFail(ctx, "无效会话!");
+                ctx.close();
                 return;
             }
             String text = request.getText();
             ProtocolStringList toList = request.getToList();
             if (toList.isEmpty()) {
                 // 群聊
-                CHANNEL_GROUP.writeAndFlush(
-                        Wrapper.newBuilder()
-                                .setChatResponse(ChatResponse.newBuilder()
-                                        .setFrom(username)
-                                        .setText(text)
-                                        .setTimestamp(Timestamp.newBuilder()
-                                                .setSeconds(System.currentTimeMillis() / 1000).build()).build()).build()
-                );
+                CHANNEL_GROUP.writeAndFlush(buildChatResponse(username, text));
             } else {
                 for (String toUserName : toList) {
                     sendPrivateCharMsg(SessionManager.getChannel(toUserName), username, text);
@@ -64,31 +58,22 @@ public class ChatHandler extends AbstractRequestHandler {
 
     private void sendPrivateCharMsg(Channel destCh, String fromUserName, String text) {
         if (destCh != null && destCh.isActive()) {
-            destCh.writeAndFlush(
-                    Wrapper.newBuilder()
-                            .setChatResponse(ChatResponse.newBuilder()
-                                    .setFrom(fromUserName)
-                                    .setText(text)
-                                    .setTimestamp(Timestamp.newBuilder()
-                                            .setSeconds(System.currentTimeMillis() / 1000).build()).build()).build()
-            );
+            destCh.writeAndFlush(buildChatResponse(fromUserName, text));
         }
+    }
+
+    private Wrapper buildChatResponse(String username, String text) {
+        return Wrapper.newBuilder()
+                .setChatResponse(ChatResponse.newBuilder()
+                        .setFrom(username)
+                        .setText(text)
+                        .setTimestamp(Timestamp.newBuilder()
+                                .setSeconds(System.currentTimeMillis() / 1000).build()).build()).build();
     }
 
     @Override
     void sendRequestFail(ChannelHandlerContext ctx, String msg) {
-        ctx.writeAndFlush(Wrapper.newBuilder()
-                .setChatResponse(ChatResponse.newBuilder()
-                        .setFrom("server")
-                        .setText(msg)
-                        .setTimestamp(Timestamp.newBuilder()
-                                .setSeconds(System.currentTimeMillis() / 1000).build()).build()).build());
-        ctx.close();
+        ctx.writeAndFlush(buildChatResponse("server", msg));
     }
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        ctx.close();
-    }
 }

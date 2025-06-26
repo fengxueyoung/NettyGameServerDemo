@@ -32,11 +32,4 @@ public class AuthHandler extends SimpleChannelInboundHandler<Wrapper> {
             }
         }
     }
-
-
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
-        ctx.close();
-    }
 }

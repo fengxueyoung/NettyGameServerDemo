@@ -1,6 +1,6 @@
 package com.fxy.game.sever.service;
 
-import com.fxy.game.core.DataStore;
+import com.fxy.game.core.datastore.UserMock;
 import com.fxy.game.core.SessionManager;
 import com.fxy.game.message.AuthRequest;
 import com.fxy.game.message.AuthResponse;
@@ -45,8 +45,8 @@ public class AuthService {
 
 
     private Wrapper handlerRegister(ChannelHandlerContext ctx, AuthRequest request) {
-        if (!DataStore.exists(request.getUsername())) {
-            DataStore.create(request.getUsername(), request.getPassword());
+        if (!UserMock.exists(request.getUsername())) {
+            UserMock.create(request.getUsername(), request.getPassword());
             return sendAuthSuccess(ctx, request.getUsername());
         } else {
             return sendAuthFail("用户名已存在!");
@@ -54,10 +54,10 @@ public class AuthService {
     }
 
     private Wrapper handlerLogin(ChannelHandlerContext ctx, AuthRequest request) {
-        if (!DataStore.exists(request.getUsername())) {
+        if (!UserMock.exists(request.getUsername())) {
             return sendAuthFail("用户不存在!");
         } else {
-            if (DataStore.verify(request.getUsername(), request.getPassword())) {
+            if (UserMock.verify(request.getUsername(), request.getPassword())) {
                 return sendAuthSuccess(ctx, request.getUsername());
             } else {
                 return sendAuthFail("用户名或密码错误!");

@@ -29,7 +29,8 @@ public class GameServerHandlerChain extends ChannelInitializer<SocketChannel> {
                         new GameHandler(),
                         new MailHandler(),
                         new RoleHandler(),
-                        new ShopHandler()
+                        new ShopHandler(),
+                        new GlobalExceptionHandler()
                 );
     }
 }

@@ -44,4 +44,16 @@ public interface RoleRequestOrBuilder extends
    */
   com.google.protobuf.ByteString
       getRoleNameBytes();
+
+  /**
+   * <code>string username = 4;</code>
+   * @return The username.
+   */
+  java.lang.String getUsername();
+  /**
+   * <code>string username = 4;</code>
+   * @return The bytes for username.
+   */
+  com.google.protobuf.ByteString
+      getUsernameBytes();
 }

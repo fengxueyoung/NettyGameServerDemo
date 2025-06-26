@@ -1,6 +1,7 @@
-package com.fxy.game.core;
+package com.fxy.game.core.datastore;
 
-import java.util.HashMap;
+import cn.hutool.crypto.digest.BCrypt;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Title DataStore
  * @Date 2025/6/23 17:18
  **/
-public class DataStore {
+public class UserMock {
 
     /**
      * mock database
@@ -34,7 +35,7 @@ public class DataStore {
      * @return 是否创建成功
      */
     public static boolean create(String username, String password) {
-        USERS.put(username, password);
+        USERS.put(username, BCrypt.hashpw(password));
         return true;
     }
 
@@ -46,7 +47,7 @@ public class DataStore {
      * @return 用户名密码是否正确
      */
     public static boolean verify(String username, String password) {
-        return USERS.get(username).equals(password);
+        return BCrypt.checkpw(password, USERS.get(username));
     }
 
 }

@@ -160,14 +160,14 @@ public final class GameMessage {
       "Mail\022\n\n\002id\030\001 \001(\t\022\014\n\004from\030\002 \001(\t\022\017\n\007subjec" +
       "t\030\003 \001(\t\022\014\n\004body\030\004 \001(\t\022\014\n\004read\030\005 \001(\010\022,\n\010s" +
       "entTime\030\006 \001(\0132\032.google.protobuf.Timestam" +
-      "p\"q\n\013RoleRequest\022\021\n\tsessionId\030\001 \001(\t\022 \n\002o" +
-      "p\030\002 \001(\0162\024.game.RoleRequest.Op\022\020\n\010roleNam" +
-      "e\030\003 \001(\t\"\033\n\002Op\022\n\n\006CREATE\020\000\022\t\n\005QUERY\020\001\"J\n\014" +
-      "RoleResponse\022\017\n\007success\030\001 \001(\010\022\017\n\007message" +
-      "\030\002 \001(\t\022\030\n\004role\030\003 \001(\0132\n.game.Role\"4\n\004Role" +
-      "\022\020\n\010roleName\030\001 \001(\t\022\r\n\005level\030\002 \001(\005\022\013\n\003exp" +
-      "\030\003 \001(\005B%\n\024com.fxy.game.messageB\013GameMess" +
-      "ageP\001b\006proto3"
+      "p\"\203\001\n\013RoleRequest\022\021\n\tsessionId\030\001 \001(\t\022 \n\002" +
+      "op\030\002 \001(\0162\024.game.RoleRequest.Op\022\020\n\010roleNa" +
+      "me\030\003 \001(\t\022\020\n\010username\030\004 \001(\t\"\033\n\002Op\022\n\n\006CREA" +
+      "TE\020\000\022\t\n\005QUERY\020\001\"J\n\014RoleResponse\022\017\n\007succe" +
+      "ss\030\001 \001(\010\022\017\n\007message\030\002 \001(\t\022\030\n\004role\030\003 \001(\0132" +
+      "\n.game.Role\"4\n\004Role\022\020\n\010roleName\030\001 \001(\t\022\r\n" +
+      "\005level\030\002 \001(\005\022\013\n\003exp\030\003 \001(\005B%\n\024com.fxy.gam" +
+      "e.messageB\013GameMessageP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -257,7 +257,7 @@ public final class GameMessage {
     internal_static_game_RoleRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_game_RoleRequest_descriptor,
-        new java.lang.String[] { "SessionId", "Op", "RoleName", });
+        new java.lang.String[] { "SessionId", "Op", "RoleName", "Username", });
     internal_static_game_RoleResponse_descriptor =
       getDescriptor().getMessageTypes().get(14);
     internal_static_game_RoleResponse_fieldAccessorTable = new
